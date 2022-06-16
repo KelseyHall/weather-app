@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import './style.css';
+import { v4 as uuidv4 } from 'uuid';
+
 function App() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
     fetch(
-      'http://api.openweathermap.org/data/2.5/onecall?lat=43.913043&lon=-78.689617&exclude=current,minutely,hourly,alerts&appid=e191e8f9a422b92f26265552a18aa515&units=metric'
+      `http://api.openweathermap.org/data/2.5/onecall?lat=43.913043&lon=-78.689617&exclude=current,minutely,hourly,alerts&appid=${process.env.REACT_APP_API_key}&units=metric`
     )
       .then((response) => response.json())
       .then((actualData) => setData(actualData))
@@ -30,10 +32,11 @@ function App() {
               if (count < 5) {
                 count++;
                 return (
-                  <div className="weatherDay" key={id}>
+                  <div className="weatherDay" key={uuidv4()}>
                     <p>{formatDate.toString()}</p>
                     <img
                       src={`https://openweathermap.org/img/wn/${weather[0].icon}.png`}
+                      alt="represents weather"
                     />
 
                     <p>
@@ -51,7 +54,7 @@ function App() {
                   </div>
                 );
               }
-              return;
+              return console.log('hide extra');
             })}
           </div>
         ) : (
